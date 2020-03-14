@@ -124,6 +124,7 @@
 
     function getAdrress() {
       document.getElementsByTagName("BODY")[0].classList.add('waiting');
+      document.getElementById("results").innerHTML = "";
 
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function () {
