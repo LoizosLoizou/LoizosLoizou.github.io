@@ -44,7 +44,7 @@
       border: none;
       text-align: center;
       background: rgb(13, 11, 57);
-      background: linear-gradient(180deg, rgba(13, 11, 57, 1) 0%, rgba(26, 21, 117, 1) 50%, rgba(13, 11, 57, 1) 100%);
+      background: linear-gradient(180deg, #0d0b39 0%, #1c1782 50%, #0d0b39 100%);
       font-size: 24px;
       color: white;
     }
@@ -59,14 +59,16 @@
       border: none;
       padding: 7px;
       background: rgb(13, 11, 57);
-      background: linear-gradient(180deg, rgba(13, 11, 57, 1) 0%, rgba(26, 21, 117, 1) 50%, rgba(13, 11, 57, 1) 100%);
+      background: linear-gradient(180deg, #0d0b39 0%, #1c1782 50%, #0d0b39 100%);
       font-size: 20px;
       color: white;
     }
     button:hover{
       box-shadow: 0px 0px 42px -14px #444444;
       cursor: pointer;
+      background-color: #231d96;
     }
+
   </style>
 </head>
 
@@ -77,15 +79,27 @@
   </div>
 
   <div id="map" style="height: 70%;"></div>
-  <div class="btn">
-    <button onclick="getAdrress()">I am here</button>
+  
+  <div>
+    <form id="postCoordinates" method="POST" action="http://www.mocky.io/v2/5e6d31a82e00009d000eeb79">
+      <input type="hidden" id="lat" name="latitude" value="0">
+      <input type="hidden" id="lng" name="longitude" value="0">
+      <div class="btn">
+        <button onclick="prepareForm()">Submit Location</button>
+      </div>
+    </form>
   </div>
-  <div id="results"></div>
 
   <script>
 
     var map, infoWindow, marker, streetNumber, street, city, zipCode, country, latitude, longitude;
     var key = "AIzaSyCHiOFDIThdan8OOzKRtS-Vh5W3rfdW9iA";
+
+    function prepareForm(){
+      document.getElementById("lat").value = marker.getPosition().lat();
+      document.getElementById("lng").value = marker.getPosition().lng();
+      document.getElementById("postCoordinates").submit();
+    }
 
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
@@ -126,51 +140,6 @@
       infoWindow.open(map);
     }
 
-    function getAdrress() {
-      document.getElementsByTagName("BODY")[0].classList.add('waiting');
-      document.getElementById("results").innerHTML = "";
-
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-
-          var response = JSON.parse(this.responseText);
-          var components = response.results[0].address_components;
-
-          components.forEach(function (component) {
-
-            if (component.types.includes("street_number")) {
-              streetNumber = component.long_name;
-            }
-            if (component.types.includes("route")) {
-              street = component.long_name;
-            }
-            if (component.types.includes("postal_code")) {
-              zipCode = component.long_name;
-            }
-            if (component.types.includes("locality")) {
-              city = component.long_name;
-            }
-            if (component.types.includes("country")) {
-              country = component.long_name;
-            }
-          });
-
-          latitude = marker.getPosition().lat();
-          longitude = marker.getPosition().lng()
-          var address = "Latitude: " + latitude + "<br>Longitude: " + longitude + "<br>Street: " + street + "<br>Number: " + streetNumber + "<br>Zip Code: " + zipCode + "<br>City: " + city + "<br>Country: " + country;
-          document.getElementById("results").innerHTML = address;
-          document.getElementsByTagName("BODY")[0].classList.remove('waiting');
-
-        }
-      };
-
-      var url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
-      url.searchParams.append('latlng', (marker.getPosition().lat() + "," + marker.getPosition().lng()));
-      url.searchParams.append('key', key);
-      xhttp.open("GET", url, true);
-      xhttp.send();
-    }
   </script>
   <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHiOFDIThdan8OOzKRtS-Vh5W3rfdW9iA&callback=initMap">
