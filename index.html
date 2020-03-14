@@ -80,7 +80,7 @@
 
   <script>
 
-    var map, infoWindow, marker, streetNumber, street, city, zipCode, country;
+    var map, infoWindow, marker, streetNumber, street, city, zipCode, country, latitude, longitude;
     var key = "AIzaSyCHiOFDIThdan8OOzKRtS-Vh5W3rfdW9iA";
 
     function initMap() {
@@ -151,7 +151,9 @@
             }
           });
 
-          var address = "Street: " + street + "<br>Number: " + streetNumber + "<br>Zip Code: " + zipCode + "<br>City: " + city + "<br>Country: " + country;
+          latitude = marker.getPosition().lat();
+          longitude = marker.getPosition().lng()
+          var address = "Latitude: " + latitude + "<br>Longitude: " + longitude + "<br>Street: " + street + "<br>Number: " + streetNumber + "<br>Zip Code: " + zipCode + "<br>City: " + city + "<br>Country: " + country;
           document.getElementById("results").innerHTML = address;
           document.getElementsByTagName("BODY")[0].classList.remove('waiting');
 
