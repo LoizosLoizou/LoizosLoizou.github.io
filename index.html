@@ -100,24 +100,6 @@
       document.getElementById("postCoordinates").submit();
     }
 
-
-    function showError(error) {
-      switch (error.code) {
-        case error.PERMISSION_DENIED:
-          console.log("User denied the request for Geolocation.");
-          break;
-        case error.POSITION_UNAVAILABLE:
-          console.log("Location information is unavailable.");
-          break;
-        case error.TIMEOUT:
-          console.log("The request to get user location timed out.");
-          break;
-        case error.UNKNOWN_ERROR:
-          console.log("An unknown error occurred.");
-          break;
-      }
-
-    }
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 0, lng: 0 },
@@ -149,11 +131,11 @@
             draggable: true
           });
           console.log("Marker Created")
-        }, function () {
-          console.log("In Callback handleLocationError function")
+        }, function (error) {
+          console.log("In Callback handleLocationError function");
+          console.log('Error: ' + error.code);
           handleLocationError(true, infoWindow, map.getCenter());
-        }),
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 10000};
+        }, {enableHighAccuracy: true})
       } else {
         console.log("Navigator has no geolocation");
         handleLocationError(false, infoWindow, map.getCenter());
@@ -165,12 +147,13 @@
       infoWindow.setContent(browserHasGeolocation ?
         'Error: The Geolocation service failed.' :
         'Error: Your browser doesn\'t support geolocation.');
+        if(browserHasGeolocation){}
       infoWindow.open(map);
     }
 
   </script>
   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?sensor=true&key=AIzaSyCHiOFDIThdan8OOzKRtS-Vh5W3rfdW9iA&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHiOFDIThdan8OOzKRtS-Vh5W3rfdW9iA&callback=initMap">
     </script>
 </body>
 
