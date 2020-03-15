@@ -149,10 +149,11 @@
             draggable: true
           });
           console.log("Marker Created")
-        }, /*function () {
+        }, function () {
           console.log("In Callback handleLocationError function")
           handleLocationError(true, infoWindow, map.getCenter());
-        }*/);
+        }),
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 10000};
       } else {
         console.log("Navigator has no geolocation");
         handleLocationError(false, infoWindow, map.getCenter());
