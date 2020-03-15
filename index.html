@@ -135,7 +135,7 @@
           console.log("In Callback handleLocationError function");
           console.log('Error: ' + error.code);
           handleLocationError(true, infoWindow, map.getCenter());
-        }, {enableHighAccuracy: true})
+        })
       } else {
         console.log("Navigator has no geolocation");
         handleLocationError(false, infoWindow, map.getCenter());
