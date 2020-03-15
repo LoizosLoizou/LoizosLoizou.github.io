@@ -6,7 +6,6 @@
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
   <style>
-
     #map {
       height: 100%;
     }
@@ -20,7 +19,7 @@
     }
 
     body.waiting {
-    cursor: progress;
+      cursor: progress;
     }
 
     @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
@@ -63,12 +62,12 @@
       font-size: 20px;
       color: white;
     }
-    button:hover{
+
+    button:hover {
       box-shadow: 0px 0px 42px -14px #444444;
       cursor: pointer;
       background-color: #231d96;
     }
-
   </style>
 </head>
 
@@ -79,7 +78,7 @@
   </div>
 
   <div id="map" style="height: 70%;"></div>
-  
+
   <div>
     <form id="postCoordinates" method="POST" action="https://coordinates.free.beeceptor.com/post">
       <input type="hidden" id="lat" name="latitude" value="0">
@@ -95,12 +94,30 @@
     var map, infoWindow, marker, streetNumber, street, city, zipCode, country, latitude, longitude;
     var key = "AIzaSyCHiOFDIThdan8OOzKRtS-Vh5W3rfdW9iA";
 
-    function prepareForm(){
+    function prepareForm() {
       document.getElementById("lat").value = marker.getPosition().lat();
       document.getElementById("lng").value = marker.getPosition().lng();
       document.getElementById("postCoordinates").submit();
     }
 
+
+    function showError(error) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          console.log("User denied the request for Geolocation.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          console.log("Location information is unavailable.");
+          break;
+        case error.TIMEOUT:
+          console.log("The request to get user location timed out.");
+          break;
+        case error.UNKNOWN_ERROR:
+          console.log("An unknown error occurred.");
+          break;
+      }
+
+    }
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 0, lng: 0 },
@@ -132,10 +149,10 @@
             draggable: true
           });
           console.log("Marker Created")
-        }, function () {
+        }, /*function () {
           console.log("In Callback handleLocationError function")
           handleLocationError(true, infoWindow, map.getCenter());
-        });
+        }*/);
       } else {
         console.log("Navigator has no geolocation");
         handleLocationError(false, infoWindow, map.getCenter());
@@ -152,7 +169,7 @@
 
   </script>
   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHiOFDIThdan8OOzKRtS-Vh5W3rfdW9iA&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?sensor=true&key=AIzaSyCHiOFDIThdan8OOzKRtS-Vh5W3rfdW9iA&callback=initMap">
     </script>
 </body>
 
